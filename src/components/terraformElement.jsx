@@ -7,7 +7,7 @@ const TerraformElement = () => {
 
   const handleKeyPress = (event) => {
     if (count !== 100) {
-      setCount(count + 1);
+      setCount(count + 5);
     }
   };
 

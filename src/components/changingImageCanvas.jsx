@@ -11,18 +11,35 @@ const ChangingImageCanvas = ({image1, image2, percentage}) => {
     const canvas = canvasRef.current;
     const stage = new createjs.Stage(canvas);
 
-    before.image.onload = function() { stage.update(); };
-    after.image.onload = function() { stage.update(); };
+    stage.addChild(after);
+    stage.addChild(before);
 
-    stage.addChild(getResultBitmap(percentage));
-    stage.update();
+    composeBitmaps(percentage, stage, before.image.height, before.image.width);
+
+    after.image.onload = function() {
+      canvas.width = after.image.width;
+      canvas.height = after.image.height;
+      stage.update();
+    };
+
+    before.image.onload = function() {
+      stage.update();
+    };
   });
 
-  const getResultBitmap = (percentage) => {
-    if (percentage > 50)
-      return before;
-    else
-      return after;
+  const composeBitmaps = (percentage, stage, height, width) => {
+    const alpha_offset_b = -255 * (1.0/(101 / (percentage+1)));
+    const alpha_offset_a = -255 - alpha_offset_b;
+
+    before.filters = [new createjs.ColorFilter(1, 1, 1, 1, 0, 0, 0, alpha_offset_b)];
+    if (percentage !== 0)
+      before.cache(0, 0, width, height);
+
+    after.filters = [new createjs.ColorFilter(1, 1, 1, 1, 0, 0, 0, alpha_offset_a)];
+
+    after.cache(0, 0, width, height);
+
+    stage.update()
   };
 
   return(<canvas ref={canvasRef}/>);
