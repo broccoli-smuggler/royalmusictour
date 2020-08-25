@@ -14,9 +14,10 @@ const MainDiv = styled.div`
   padding: 5px;
   
   .text {
-    margin: 10px;
+    margin: 15px;
     color: #CCCCCC;
     text-align: center;
+    font-size: 18px;
   }
 `;
 

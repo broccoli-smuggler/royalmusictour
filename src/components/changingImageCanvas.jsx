@@ -28,13 +28,13 @@ const ChangingImageCanvas = ({image1, image2, percentage}) => {
   });
 
   const composeBitmaps = (percentage, height, width) => {
+    if (percentage === 0) return;
+
     const alpha_offset_b = -255 * (1.0/(101 / (percentage+1)));
     const alpha_offset_a = -255 - alpha_offset_b;
 
     before.filters = [new createjs.ColorFilter(1, 1, 1, 1, 0, 0, 0, alpha_offset_b)];
-    // Don't cache on the first instance
-    if (percentage !== 0)
-      before.cache(0, 0, width, height);
+    before.cache(0, 0, width, height);
 
     after.filters = [new createjs.ColorFilter(1, 1, 1, 1, 0, 0, 0, alpha_offset_a)];
     after.cache(0, 0, width, height);
