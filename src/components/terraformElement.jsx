@@ -16,7 +16,7 @@ const TerraformElement = () => {
   });
 
   return (
-    <div id="focused" tabIndex="-1" onKeyPress={handleKeyPress} >
+    <div role="button" id="focused" tabIndex="-1" onKeyPress={handleKeyPress} >
       <ChangingImageCanvas image1="/terraformed-mars1.jpg" image2="/terraformed-mars2.jpg" percentage={count}/>
       <div className="text">
         Hello my terraforming friends!

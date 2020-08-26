@@ -1,33 +1,35 @@
 import React, {useEffect, useRef} from "react";
 
-import createjs from 'createjs-module'
-
 const ChangingImageCanvas = ({image1, image2, percentage}) => {
   const canvasRef = useRef(null);
-  const before = new createjs.Bitmap(image1);
-  const after = new createjs.Bitmap(image2);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const stage = new createjs.Stage(canvas);
+    if (typeof window !== `undefined`) {
+      const createjs = require("createjs-module");
 
-    stage.addChild(after);
-    stage.addChild(before);
+      const before = new createjs.Bitmap(image1);
+      const after = new createjs.Bitmap(image2);
+      const canvas = canvasRef.current;
+      const stage = new createjs.Stage(canvas);
 
-    composeBitmaps(percentage, before.image.height, before.image.width);
+      stage.addChild(after);
+      stage.addChild(before);
 
-    after.image.onload = function() {
-      canvas.width = after.image.width;
-      canvas.height = after.image.height;
-      stage.update();
-    };
+      composeBitmaps(createjs, before, after, percentage, before.image.height, before.image.width);
 
-    before.image.onload = function() {
-      stage.update();
-    };
+      after.image.onload = function() {
+        canvas.width = after.image.width;
+        canvas.height = after.image.height;
+        stage.update();
+      };
+
+      before.image.onload = function() {
+        stage.update();
+      };
+    }
   });
 
-  const composeBitmaps = (percentage, height, width) => {
+  const composeBitmaps = (createjs, before, after, percentage, height, width) => {
     if (percentage === 0) return;
 
     const alpha_offset_b = -255 * (1.0/(101 / (percentage+1)));
